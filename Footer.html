@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footer Scroll Effect</title>
+    <style>
+        /* Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 120vh; /* Just to allow scrolling */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #282c34;
+            color: white;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: rgba(128, 128, 128, 0.5); /* Light Grey with Transparency */
+            color: black;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            opacity: 0;
+            backdrop-filter: blur(8px);
+            font-size: 16px;
+            transition: opacity 0.5s ease-in-out;
+        }
+        @media (max-width: 768px){
+            
+        }
+    </style>
+</head>
+<body>
+
+    <footer id="dynamic-footer">
+        <p>&copy; 2025 Ka-Nada. All rights reserved.</p>
+    </footer>
+
+    <script>
+const footer = document.getElementById("dynamic-footer");
+
+let lastScrollY = window.scrollY;
+
+window.addEventListener("scroll", function () {
+    let currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY) {  
+        // Show footer when scrolling down
+        footer.style.opacity = "1";
+    } else {  
+        // Hide footer when scrolling up
+        footer.style.opacity = "0";
+    }
+
+    lastScrollY = currentScrollY;
+});
+
+    </script>
+
+</body>
+</html>

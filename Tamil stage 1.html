@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Keyboard Layout</title>
+    <style>
+      body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #282c34;
+}
+
+.keyboard {
+    display: grid;
+    grid-template-columns: repeat(7, 60px);
+    gap: 10px;
+    padding: 20px;
+    background: #1c1f26;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.key-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.key {
+    width: 60px;
+    height: 60px;
+    background-color: #3b3f4a;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.key input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.key:hover {
+    background-color: #5a5e6e;
+}
+
+.key:active {
+    background-color: #777b8c;
+    transform: scale(0.95);
+}
+
+.key.pressed {
+    background-color: green;
+}
+
+.key.wrong {
+    background-color: red;
+}
+
+.label {
+    font-size: 12px;
+    color: #ccc;
+    margin-top: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+.button-container { 
+    display: flex;
+    justify-content: center; /* Keeps it centered */
+    width: 100%;
+    margin-top: 20px; /* Space between keyboard and button */
+}
+
+#continueButton {
+    margin-left: 360px; /* Moves the button slightly to the right */
+    align-items: center;
+    background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+    border: 0;
+    border-radius: 6px; /* Slightly reduced border-radius */
+    box-shadow: rgba(151, 65, 252, 0.1) 0 4px 8px -3px; /* Slightly softer shadow */
+    box-sizing: border-box;
+    color: #ffffff;
+    display: flex;
+    font-size: 16px; /* Slightly smaller font size */
+    justify-content: center;
+    line-height: 1em; /* Adjusted line height */
+    max-width: 100%;
+    min-width: 130px; /* Slightly reduced width */
+    min-height: 40px; /* Adjusted height */
+    padding: 4px; /* Slightly reduced padding */
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#continueButton span {
+    background: none;
+    padding: 12px 20px; /* Reduced padding */
+    border-radius: 4px; /* Slightly smaller border-radius */
+    width: 100%;
+    height: 100%;
+    transition: 300ms;
+}
+
+#continueButton:hover span {
+    background: none;
+}
+
+#continueButton:active {
+    transform: scale(0.97); /* Slightly smaller shrink effect */
+}
+#continueButton {
+    display: none;
+}
+
+
+.hidden {
+    display: none;
+}
+/* Popup Modal Styles */
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background: white; /* Set background to white */
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popup p {
+    color: black; /* Set text color inside the popup to black */
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.popup button {
+    margin-top: 15px;
+    background: #5b42f3;
+    color: rgb(43, 17, 17);
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.popup button:hover {
+    background: #00ddeb;
+}
+
+.uyir-mei {
+    position: absolute;
+    top: 10%; /* Moves the text closer to the top */
+    left: 50%;
+    transform: translateX(-50%); /* Centers it horizontally */
+    font-size: 3rem;
+    font-weight: 300;
+    color: white; /* Text color set to white */
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Heading Styling */
+.heading {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px 0;
+}
+
+/* Footer Styling */
+#footer-container {
+    width: 100%;
+}
+
+footer {
+    background-color: rgba(128, 128, 128, 0.5);
+    color: black;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    opacity: 0;
+    backdrop-filter: blur(8px);
+    font-size: 16px;
+    transition: opacity 0.5s ease-in-out;
+}
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .keyboard {
+        grid-template-columns: repeat(5, 50px); /* Reduce number of columns */
+        padding: 10px;
+    }
+
+    .key {
+        width: 50px;
+        height: 50px;
+        font-size: 18px; /* Smaller font size for smaller screens */
+    }
+
+    #continueButton {
+        margin-left: 0; /* Center button for smaller screens */
+        min-width: 100px;
+        padding: 6px 10px;
+    }
+
+    .heading {
+        font-size: 24px; /* Smaller heading */
+    }
+
+    .uyir-mei {
+        font-size: 2rem; /* Adjust text size for small screens */
+    }
+
+    footer {
+        font-size: 14px; /* Smaller footer text */
+    }
+
+    .popup {
+        width: 250px; /* Adjust modal width for small screens */
+    }
+
+    .popup p {
+        font-size: 14px; /* Smaller text inside modal */
+    }
+}
+    </style>
+</head>
+<body>
+   <!-- Help Button -->
+   <button class="faq-button" onclick="showHelp()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+        <path d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"></path>
+    </svg>
+    <span class="tooltip">Need help</span>
+</button>
+
+<!-- Overlay -->
+<div id="overlay" onclick="hideHelp()"></div>
+
+<!-- Help Image Modal -->
+<div id="helpImage" onclick="event.stopPropagation()">
+    <button class="close-btn" onclick="hideHelp()">X</button>
+    <img src="http://ka-naada.in/wp-content/uploads/2025/04/sticker2.jpg" alt="logo" style="width: 100%;">
+</div>
+
+
+    <!-- Load Header Here -->
+    <div id="header-container"></div>
+    <div id="stage1" class="keyboard"></div>
+    <button id="continueButton" class="hidden">Continue</button>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <p>Stage 1 is completed!</p>
+            <button id="closePopup">OK</button>
+        </div>
+    </div>
+    <h1 class="uyir-mei">மெய் மற்றும் உயிர் எழுத்துகள்</h1>
+      <!-- Footer Container -->
+      <div id="footer-container"></div> 
+    <script>
+document.addEventListener("copy", (event) => {
+    event.preventDefault();
+    alert("Copying content is disabled.");
+});
+
+document.addEventListener("paste", (event) => {
+    event.preventDefault();
+    alert("Pasting content is disabled.");
+});
+
+  // Function to Load External HTML Files
+  function loadComponent(elementId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
+                })
+                .catch(error => console.error('Error loading component:', error));
+        }
+
+        // Load header.html and footer.html
+        loadComponent("header-container", "header.html");
+        loadComponent("footer-container", "footer.html");
+
+        // Footer Scroll Effect
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener("scroll", function () {
+            let footer = document.querySelector("footer");
+            let currentScrollY = window.scrollY;
+
+            if (currentScrollY > lastScrollY) {  
+                // Show footer when scrolling down
+                footer.style.opacity = "1";
+            } else {  
+                // Hide footer when scrolling up
+                footer.style.opacity = "0";
+            }
+
+            lastScrollY = currentScrollY;
+        });
+
+        // Show footer after 2 seconds on page load
+        setTimeout(() => {
+            let footer = document.querySelector("footer");
+            if (footer) {
+                footer.style.opacity = "1";
+            }
+        }, 1000);
+
+        function showHelp() {
+            document.getElementById("helpImage").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function hideHelp() {
+            document.getElementById("helpImage").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+
+       let continueClickCount = 0;
+let stage = 1;
+
+const swara = ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ'];
+const vyanjana = ['க்', 'ங்', 'ச்', 'ஞ்', 'ட்', 'ண்', 'த்', 'ந்', 'ப்', 'ம்', 'ய்', 'ர்', 'ல்', 'வ்', 'ள்'];
+
+
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
+function addInputListeners() {
+    const inputs = document.querySelectorAll(".key input");
+    const continueButton = document.getElementById("continueButton");
+
+    // Hide the continue button initially
+    continueButton.classList.add("hidden");
+
+    inputs.forEach((input, index) => {
+        input.addEventListener("keydown", (event) => {
+            document.querySelectorAll(".key").forEach(k => k.classList.remove("gray"));
+            if (event.key === "Shift") {
+                input.parentElement.classList.add("gray");
+            }
+        });
+
+        input.addEventListener("input", (event) => {
+            const value = event.target.value.trim();
+            const expectedValue = event.target.getAttribute("data-value");
+            const keyContainer = event.target.parentElement;
+            
+            keyContainer.classList.remove("gray", "wrong", "pressed");
+
+            if (value.length < expectedValue.length) return;
+
+            if (value === expectedValue) {
+                keyContainer.classList.add("pressed");
+                if (index < inputs.length - 1) {
+                    setTimeout(() => inputs[index + 1].focus(), 150);
+                }
+            } else {
+                keyContainer.classList.add("wrong");
+            }
+
+            checkAllFilled(); // Check if all keys are correct
+        });
+    });
+}
+
+function checkAllFilled() {
+    const inputs = document.querySelectorAll(".key input");
+    let allCorrect = true;
+
+    inputs.forEach(input => {
+        const value = input.value.trim().normalize("NFC");  // Normalize input
+        const expectedValue = input.getAttribute("data-value").trim().normalize("NFC"); // Normalize expected
+
+        console.log(`Input: [${value}], Expected: [${expectedValue}]`); // Debugging log
+
+        if (value !== expectedValue) {
+            allCorrect = false;
+        }
+    });
+
+    console.log("All Correct:", allCorrect);
+
+    const continueButton = document.getElementById("continueButton");
+
+    if (allCorrect) {
+        continueButton.classList.remove("hidden");
+        continueButton.style.display = "block";
+    } else {
+        continueButton.classList.add("hidden");
+        continueButton.style.display = "none";
+    }
+}
+
+
+function generateKeyboard(keys) {
+    const stageDiv = document.getElementById("stage1");
+    stageDiv.innerHTML = "";
+
+    const limitedKeys = keys.slice(0, 18);
+
+    limitedKeys.forEach(letter => {
+        const keyContainer = document.createElement("div");
+        keyContainer.classList.add("key-container");
+
+        const keyDiv = document.createElement("div");
+        keyDiv.classList.add("key");
+
+        const input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.setAttribute("maxlength", "6");
+        input.setAttribute("data-value", letter);
+        input.setAttribute("placeholder", letter);
+
+        keyDiv.appendChild(input);
+        keyContainer.appendChild(keyDiv);
+
+        const label = document.createElement("span");
+        label.classList.add("label");
+        label.textContent = `அழுத்து ${letter}`;
+
+        keyContainer.appendChild(label);
+        stageDiv.appendChild(keyContainer);
+    });
+    addInputListeners();
+checkAllFilled(); // Ensure it runs initially
+
+
+}
+
+
+function generateRandomKeys() {
+    const randomKeys = [...swara, ...vyanjana];
+    shuffleArray(randomKeys);
+    generateKeyboard(randomKeys);
+}
+
+document.getElementById("continueButton").addEventListener("click", () => {
+    continueClickCount++;
+    
+    if (continueClickCount === 2) {
+        document.getElementById("popup").style.display = "block";
+        return;
+    }
+
+    if (stage === 1) {
+        generateRandomKeys();
+        stage++;
+    } else if (stage === 2) {
+        generateKeyboard(vyanjana);
+        stage++;
+    } else if (stage === 3) {
+        generateKeyboard(swara); 
+        stage++;
+    } else {
+        alert("You have completed all stages!");
+    }
+});
+
+// Close popup and move to next page
+document.getElementById("closePopup").addEventListener("click", () => {
+    document.getElementById("popup").style.display = "none";
+    window.location.href = "Tamil stage 2.html"; // Redirect user
+});
+
+generateKeyboard(swara);
+
+
+    </script>
+
+</body>
+</html>

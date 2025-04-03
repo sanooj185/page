@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paragraph Stage</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+            color: white;
+        }
+
+        .paragraph-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .paragraph-box, .paragraph-input {
+            width: 600px;
+            background-color: #3b3f4a;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            overflow-y: auto;
+        }
+
+        .paragraph-input {
+            height: 200px;
+            border: none;
+            outline: none;
+            resize: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #continueButton {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #3b3f4a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #continueButton:hover {
+            background-color: #5a5e6e;
+        }
+
+        .continue-button-visible {
+            display: block;
+        }
+
+        #statusButton {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .status-correct {
+            background-color: yellow;
+            color: black;
+        }
+
+        .status-wrong {
+            background-color: red;
+            color: white;
+        }
+
+        /* Modal Popup Styling */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            display: none;
+        }
+
+        .modal button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #3b3f4a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal button:hover {
+            background-color: #5a5e6e;
+        }
+
+        /* Heading Styles */
+        .paragraph-heading {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 20px;
+        }
+        /* Heading Styling */
+.heading {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px 0;
+}
+
+/* Footer Styling */
+#footer-container {
+    width: 100%;
+}
+
+footer {
+    background-color: rgba(128, 128, 128, 0.5);
+    color: black;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    opacity: 0;
+    backdrop-filter: blur(8px);
+    font-size: 16px;
+    transition: opacity 0.5s ease-in-out;
+}
+@media (max-width: 768px) {
+    .paragraph-box, .paragraph-input {
+        width: 90%; /* Adjust width for smaller screens */
+        font-size: 14px; /* Reduce font size */
+        padding: 8px;
+    }
+
+    .paragraph-input {
+        height: 150px; /* Reduce input height */
+    }
+
+    #continueButton, #statusButton {
+        width: 100%; /* Full width for better touch */
+        font-size: 16px; /* Adjust font size */
+        padding: 12px; /* Adjust padding */
+    }
+
+    .modal {
+        width: 90%; /* Make the modal fit smaller screens */
+        padding: 15px;
+    }
+
+    .heading {
+        font-size: 22px; /* Reduce heading size */
+    }
+
+    footer {
+        font-size: 14px; /* Smaller text in footer */
+    }
+}
+
+    </style>
+</head>
+<body>
+      <!-- Help Button -->
+      <button class="faq-button" onclick="showHelp()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+            <path d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"></path>
+        </svg>
+        <span class="tooltip">Need help</span>
+    </button>
+    
+    <!-- Overlay -->
+    <div id="overlay" onclick="hideHelp()"></div>
+    
+<!-- Help Image Modal -->
+<div id="helpImage" onclick="event.stopPropagation()">
+    <button class="close-btn" onclick="hideHelp()">X</button>
+    <img src="http://ka-naada.in/wp-content/uploads/2025/04/sticker2.jpg" alt="logo" style="width: 100%;">
+</div>
+
+    
+        <!-- Load Header Here -->
+        <div id="header-container"></div>
+    <div class="paragraph-container">
+        <!-- Paragraph Stage Heading -->
+        <div class="paragraph-heading">ಖಂಡಿಕೆ</div>
+        
+        <div class="paragraph-box" id="paragraphDisplay">
+            ದೀಪಾವಳಿಯು ಐದು ದಿನಗಳ ಕಾಲ ಭಾರತದಲ್ಲಿ ಆಚರಿಸಲಾಗುವ ಬೆಳಕಿನ ಹಬ್ಬವಾಗಿದೆ. ಜನರು ತಮ್ಮ ಮನೆಗಳನ್ನು ಸ್ವಚ್ಛಗೆಳಿಸುತ್ತಾರೆ ಮತ್ತು ಹೂವುಗಳು, ಡೈಯಾಗಳು ಮತ್ತು ರಂಗೋಲಿಗಳೀಂದ ಅಲಂಕರಿಸುತ್ತಾರೆ. ದೀಪಾವಳಿಯ ದಿನದಂದು ನಾವು ಹೊಸ ಬಟ್ಟೆಗಳನ್ನು ಧರಿಸುತ್ತೇ ಮತ್ತು ರುಚಿಕರವಾದ ಸೀಹಿತಿಂಡಿಗಳನ್ನು ತಿನ್ನುತ್ತೇ.
+        </div>
+        <textarea class="paragraph-input" id="paragraphInput" placeholder=" "></textarea>
+        <button id="statusButton">Keep Going</button>
+        <button id="continueButton" class="hidden">Continue</button>
+    </div>
+
+    <!-- Completion Modal -->
+    <div id="completionModal" class="modal">
+        <p>🎉 Congratulations! You have completed all stages! 🎉</p>
+        <button id="okCompletionButton">OK</button>
+    </div>
+<!-- Footer Container -->
+<div id="footer-container"></div> 
+    <script>
+        document.addEventListener("copy", (event) => {
+    event.preventDefault();
+    alert("Copying content is disabled.");
+});
+
+document.addEventListener("paste", (event) => {
+    event.preventDefault();
+    alert("Pasting content is disabled.");
+});
+
+        // Function to Load External HTML Files
+     function loadComponent(elementId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
+                })
+                .catch(error => console.error('Error loading component:', error));
+        }
+
+        // Load header.html and footer.html
+        loadComponent("header-container", "header.html");
+        loadComponent("footer-container", "footer.html");
+
+        // Footer Scroll Effect
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener("scroll", function () {
+            let footer = document.querySelector("footer");
+            let currentScrollY = window.scrollY;
+
+            if (currentScrollY > lastScrollY) {  
+                // Show footer when scrolling down
+                footer.style.opacity = "1";
+            } else {  
+                // Hide footer when scrolling up
+                footer.style.opacity = "0";
+            }
+
+            lastScrollY = currentScrollY;
+        });
+
+        // Show footer after 2 seconds on page load
+        setTimeout(() => {
+            let footer = document.querySelector("footer");
+            if (footer) {
+                footer.style.opacity = "1";
+            }
+        }, 1000);
+
+        function showHelp() {
+            document.getElementById("helpImage").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function hideHelp() {
+            document.getElementById("helpImage").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+        const paragraphText = `ದೀಪಾವಳಿಯು ಐದು ದಿನಗಳ ಕಾಲ ಭಾರತದಲ್ಲಿ ಆಚರಿಸಲಾಗುವ ಬೆಳಕಿನ ಹಬ್ಬವಾಗಿದೆ. ಜನರು ತಮ್ಮ ಮನೆಗಳನ್ನು ಸ್ವಚ್ಛಗೆಳಿಸುತ್ತಾರೆ ಮತ್ತು ಹೂವುಗಳು, ಡೈಯಾಗಳು ಮತ್ತು ರಂಗೋಲಿಗಳೀಂದ ಅಲಂಕರಿಸುತ್ತಾರೆ. ದೀಪಾವಳಿಯ ದಿನದಂದು ನಾವು ಹೊಸ ಬಟ್ಟೆಗಳನ್ನು ಧರಿಸುತ್ತೇ ಮತ್ತು ರುಚಿಕರವಾದ ಸೀಹಿತಿಂಡಿಗಳನ್ನು ತಿನ್ನುತ್ತೇ.`;
+
+        const paragraphInput = document.getElementById("paragraphInput");
+        const continueButton = document.getElementById("continueButton");
+        const statusButton = document.getElementById("statusButton");
+        const completionModal = document.getElementById("completionModal");
+        const okCompletionButton = document.getElementById("okCompletionButton");
+
+        paragraphInput.addEventListener("input", () => {
+            const userInput = paragraphInput.value;
+            let incorrectChars = "";
+            let isTypingCorrectly = true;
+
+            for (let i = 0; i < userInput.length; i++) {
+                if (userInput[i] !== paragraphText[i]) {
+                    incorrectChars += userInput[i];
+                    isTypingCorrectly = false;
+                }
+            }
+
+            if (isTypingCorrectly) {
+                statusButton.textContent = "Keep Going";
+                statusButton.classList.remove("status-wrong");
+                statusButton.classList.add("status-correct");
+            } else {
+                statusButton.textContent = `Incorrect: ${incorrectChars}`;
+                statusButton.classList.remove("status-correct");
+                statusButton.classList.add("status-wrong");
+            }
+
+            if (userInput === paragraphText) {
+                statusButton.textContent = "✔ Correct!";
+                continueButton.classList.add("continue-button-visible");
+
+                setTimeout(() => {
+                    completionModal.style.display = "block";
+                }, 500);
+            }
+        });
+
+        okCompletionButton.addEventListener("click", () => {
+            completionModal.style.display = "none";
+        });
+
+        continueButton.addEventListener("click", () => {
+            alert("ಮುಂದಿನ ಹಂತಕ್ಕೆ ಸಾಗುತ್ತಿದ್ದೇವೆ...");
+        });
+
+    </script>
+
+</body>
+</html>

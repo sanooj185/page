@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Practice</title>
+    <style>
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #141010;
+    color: white;
+    font-family: Arial, sans-serif;
+    flex-direction: column;
+    text-align: center;
+    position: relative;
+}
+
+.stats-container {
+    position: absolute;
+    top: 80px;
+    right: 100px;
+    font-size: 18px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+
+.controls {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+select {
+    padding: 8px 15px;
+    border: 2px solid #5a189a;
+    border-radius: 5px;
+    background-color: #240046;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+}
+
+select:hover {
+    background-color: #3c096c;
+}
+
+button {
+    padding: 8px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #7b2cbf;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #9d4edd;
+}
+
+.input-container {
+    position: relative;
+    width: 100vw;
+    max-width: 3000px;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.background-text {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-size: 22px;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.3);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-align: left;
+    font-family: inherit;
+    line-height: 1.5;
+    z-index: 1;
+}
+
+.input-box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-size: 22px;
+    padding: 20px;
+    border: none;
+    background: transparent;
+    color: transparent;
+    outline: none;
+    resize: none;
+    z-index: 2;
+    caret-color: white;
+    text-align: left;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+.correct {
+    color: white;
+}
+
+.incorrect {
+    color: red;
+}
+
+#popup-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    z-index: 1000;
+}
+
+.popup-content h2 {
+    margin: 0 0 10px;
+}
+
+.popup-content p {
+    margin: 5px 0;
+}
+
+#close-popup {
+    margin-top: 10px;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #7b2cbf;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#close-popup:hover {
+    background-color: #9d4edd;
+}
+
+/* Heading Styling */
+.heading {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px 0;
+}
+
+/* Footer Styling */
+#footer-container {
+    width: 100%;
+    margin-bottom: 100px;
+}
+
+footer {
+    background-color: rgba(128, 128, 128, 0.5);
+    color: black;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    left: -20px;
+    width: 100%;
+    opacity: 0;
+    backdrop-filter: blur(8px);
+    font-size: 16px;
+    transition: opacity 0.5s ease-in-out;
+}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil&display=swap');
+body {
+    font-family: 'Noto Sans Tamil', sans-serif;
+}
+@media (max-width: 768px) {
+    /* Body & General Layout */
+    body, html {
+        padding: 10px;
+        height: auto;
+        justify-content: flex-start; /* Allow scrolling */
+        font-size: 14px; /* Reduce font size for smaller screens */
+    }
+
+    /* Stats Container */
+    .stats-container {
+        position: static; /* Remove absolute positioning */
+        top: 0;
+        right: 0;
+        font-size: 14px;
+        padding: 8px 12px;
+        margin-top: 10px;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 6px;
+    }
+
+    /* Controls */
+    .controls {
+        flex-direction: column; /* Stack items vertically */
+        gap: 8px;
+    }
+
+    select, button {
+        width: 100%; /* Make buttons and select full-width */
+        padding: 10px 15px;
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+    /* Input Container */
+    .input-container {
+        width: 100%;
+        height: 40vh; /* Adjust height for smaller screens */
+        max-width: 100%;
+    }
+
+    .background-text, .input-box {
+        font-size: 18px; /* Adjust font size */
+        padding: 15px;
+    }
+
+    /* Heading */
+    .heading {
+        font-size: 24px;
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+
+    /* Popup */
+    #popup-message {
+        width: 90%;
+        padding: 15px;
+    }
+
+    /* Footer */
+    footer {
+        font-size: 14px;
+        padding: 10px;
+        opacity: 1;
+    }
+
+    .popup-content h2 {
+        font-size: 18px;
+    }
+
+    .popup-content p {
+        font-size: 14px;
+    }
+
+    #close-popup {
+        padding: 8px 15px;
+    }
+}
+
+    </style>
+</head>
+<body>
+     <!-- Help Button -->
+<button class="faq-button" onclick="showHelp()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+        <path d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"></path>
+    </svg>
+    <span class="tooltip">Need help</span>
+</button>
+
+<!-- Overlay -->
+<div id="overlay" onclick="hideHelp()"></div>
+
+<!-- Help Image Modal -->
+<div id="helpImage" onclick="event.stopPropagation()">
+    <button class="close-btn" onclick="hideHelp()">X</button>
+    <img src="http://ka-naada.in/wp-content/uploads/2025/04/sticker1.jpg" alt="logo" style="width: 100%;">
+</div>
+
+
+    <!-- Load Header Here -->
+    <div id="header-container"></div>
+    <div class="stats-container">
+        <div id="timer-display">Time: 0s</div>
+    </div>
+    
+    <div class="controls">
+        <select id="timer-select">
+            <option value="120">2 min</option>
+            <option value="60">1 min</option>
+            <option value="40">40 sec</option>
+        </select>
+        
+        <button id="start-button">Start</button>
+    </div>
+
+    <div class="input-container">
+        <div id="background-text" class="background-text"></div>
+        <textarea id="typing-input" class="input-box"></textarea>
+
+    </div>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+    <script>
+         // Function to Load External HTML Files
+         function loadComponent(elementId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
+                })
+                .catch(error => console.error('Error loading component:', error));
+        }
+
+        // Load header.html and footer.html
+        loadComponent("header-container", "header.html");
+        loadComponent("footer-container", "footer.html");
+
+        // Footer Scroll Effect
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener("scroll", function () {
+            let footer = document.querySelector("footer");
+            let currentScrollY = window.scrollY;
+
+            if (currentScrollY > lastScrollY) {  
+                // Show footer when scrolling down
+                footer.style.opacity = "1";
+            } else {  
+                // Hide footer when scrolling up
+                footer.style.opacity = "0";
+            }
+
+            lastScrollY = currentScrollY;
+        });
+
+        // Show footer after 2 seconds on page load
+        setTimeout(() => {
+            let footer = document.querySelector("footer");
+            if (footer) {
+                footer.style.opacity = "1";
+            }
+        }, 1000);
+
+        function showHelp() {
+            document.getElementById("helpImage").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function hideHelp() {
+            document.getElementById("helpImage").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+        const paragraphs = [
+    "சூரியன் மலைகளின் பின்னால் மறையும் போது, சமவெளியில் அழகான பொன்னிற ஒளி பரவியது. பறவைகள் அவற்றின் இறுதிப் பாடல்களை பாடிக்கொண்டிருந்தன, மேலும் தென்றல் காற்று மரங்களின் இலைகளை மெதுவாக அசைத்தது. இது ஒரு அமைதியான மாலை நேரமாக இருந்தது, இயற்கையின் அழகை ரசிக்க ஒரு சிறந்த தருணம். வானம் சிவப்பு மற்றும் கேழ்வரகு நிறமாக மாறியது, மற்றும் அமைதியின் உணர்வு முழு பிரபஞ்சத்திலும் பரவியது.",
+
+    "தொழில்நுட்பம் எங்கள் வாழ்க்கையை மற்றும் உலகத்துடன் தொடர்பு கொள்ளும் முறையை மாற்றியுள்ளது. ஸ்மார்ட்போன்களிலிருந்து செயற்கை நுண்ணறிவுக்கு வரை, புதுமைகள் எங்கள் தினசரி வாழ்வை நிர்ணயிக்கின்றன. உலகமெங்கும் உள்ளவர்கள் உடனடியாக இணைக்க முடியும், எல்லையற்ற அறிவைப் பெற முடியும். ஆனால், தொழில்நுட்ப வளர்ச்சி தனியுரிமை, பாதுகாப்பு மற்றும் மனித உறவுகளை பற்றிய கேள்விகளை எழுப்புகிறது.",
+
+    "ஒரு நல்ல புத்தகம் வாசகர்களை வேறு உலகத்திற்கு அழைத்துச் செல்லும் சக்தியை கொண்டுள்ளது. அது ஒரு சுவாரஸ்யமான சாகசமாக இருக்கலாம், ஒரு மனதைக் கவரும் காதல் கதையாக இருக்கலாம், அல்லது ஆழ்ந்த சிந்தனையை தூண்டும் புத்தகம் ஆகலாம். வாசிப்பின் மூலம் மக்கள் புதிய பார்வைகளை கண்டறியலாம், வித்தியாசமான பண்புகளை புரிந்துகொள்ளலாம், மேலும் கருணை மிகுந்தவர்களாக மாறலாம். புத்தகங்கள் வெறும் எழுத்துகளின் தொகுப்பல்ல; அவை கற்பனைக்கான கதவுகள்.",
+
+    "வெற்றி எப்போதும் திறமையிலும் புத்திசாலித்தனத்திலும் மட்டுமல்ல, ஆனால் தீர்மானம் முக்கிய பங்கு வகிக்கிறது. பல சிறந்த சாதனையாளர்கள் வெற்றிக்கு முன்னர் பல தோல்விகளை அனுபவித்துள்ளனர். ஆனால், அவர்களை வித்தியாசப்படுத்துவது அவர்களின் மனவலிமை மற்றும் செயலாற்றும் ஆற்றல். கடுமையான உழைப்பு, பொறுமை மற்றும் நேர்மறையான அணுகுமுறை எந்தவொரு சவாலையும் ஒரு வாய்ப்பாக மாற்ற முடியும். இறுதியில், முயற்சி செய்யும்வர்களே உண்மையாக வெற்றியாளர்கள்.",
+
+    "குடும்பம் என்பது வாழ்க்கையின் அடிப்படை. நமக்காக எப்போதும் காத்திருக்கும் உறவுகள் குடும்பத்தில் தான் இருக்கின்றன. சந்தோஷமான தருணங்களை பகிர்ந்து கொள்ளவும், பிரச்சினைகளை தீர்க்கவும் குடும்பம் மிகவும் அவசியம். எந்த சூழ்நிலையிலும் குடும்பத்தினர் ஆதரவாக இருந்தால், வாழ்க்கையின் எந்த சவாலையும் எதிர்கொள்ள முடியும்.",
+
+    "நண்பர்கள் வாழ்க்கையின் ஒருபகுதி மட்டுமல்ல, அது ஒரு சக்தி. உண்மையான நண்பர்கள் உங்கள் மகிழ்ச்சியில் சிரிக்கிறார்கள், ஆனால் உங்கள் துக்கத்தில் உங்களை ஆற்றுப்படுத்துகிறார்கள். நட்பின் ஆழமான உறவு வாழ்க்கையை மகிழ்ச்சியாக மாற்றுகிறது. நண்பர்கள் இல்லாத வாழ்க்கை, வண்ணமில்லா ஓவியம்போல் இருக்கும்.",
+
+    "மழை வரும் போது, பூமி தன் மணமூட்டும். புதிய வாழ்க்கையை தரும் மழைத்துளிகள் செடிகளுக்கு புத்துயிர் கொடுக்கும். குழந்தைகள் மழையில் ஆடி மகிழ்வதை காண மிகவும் அழகாக இருக்கும். மழைபொழிவு மனித மனதிற்கு புத்துணர்ச்சி அளிக்கிறது.",
+
+    "வாழ்க்கை ஒரு பயணம், இதில் ஏற்றத் தாழ்வுகள் இயல்பானவை. ஒவ்வொரு போராட்டத்திலும் ஒரு பாடம் உள்ளது, அது எங்களை மேலும் அறிவாளிகளாக மாற்றும். சவால்களை சந்திக்க தயங்காதீர்கள், அவை உங்களை வெற்றியின் பாதையில் அழைத்துச் செல்லும். வாழ்க்கையின் பாடங்களை புரிந்து கொள்வது மிக முக்கியம்.",
+
+    "அன்பு என்பது மனிதர்களை இணைக்கும் ஒரு சக்தி. அது மட்டுமே உலகில் சமாதானத்தையும், மகிழ்ச்சியையும் கொண்டுவர முடியும். ஒவ்வொரு நாளும், நீங்கள் ஒருவருக்கு ஒரு நல்ல வார்த்தை சொன்னால், அது அவரின் முழு நாளையும் மகிழ்ச்சியாக மாற்றும். நம் சொற்கள் மற்றவர்களின் மனநிலையை தீர்மானிக்கும் என்பதால் அவற்றை கவனமாக பயன்படுத்த வேண்டும்.",
+
+    "சுற்றுச்சூழல் பாதுகாப்பு மிகவும் முக்கியம். நாம் இயற்கையை பாதுகாக்காமல் இருந்தால், எதிர்காலம் மிக மோசமாக இருக்கும். மரங்களை நடுங்கள், பசுமையை வளருங்கள், இயற்கையுடன் இணைந்து வாழுங்கள். நமது பூமியை பாதுகாப்பது எங்கள் கடமை."
+];
+
+function getRandomParagraph() {
+    return paragraphs[Math.floor(Math.random() * paragraphs.length)];
+}
+
+console.log(getRandomParagraph());
+
+let selectedParagraph = "";
+const backgroundText = document.getElementById("background-text");
+const inputBox = document.getElementById("typing-input");
+const timerDisplay = document.getElementById("timer-display");
+const timerSelect = document.getElementById("timer-select");
+const startButton = document.getElementById("start-button");
+
+let startTime = null;
+let totalTyped = 0;
+let correctTyped = 0;
+let countdown = 0;
+let timer = null; // Keep only one timer declaration
+let timeLeft = 10; // Default time (changeable)
+let isRunning = false; // Track if timer is running
+
+
+
+function updateBackgroundText() {
+    let userText = inputBox.value;
+    let formattedText = "";
+    let cleanedUserText = userText.replace(/\s+/g, ''); // Remove spaces for comparison
+    let cleanedParagraph = selectedParagraph.replace(/\s+/g, '');
+
+    // ⏳ Start the timer ONLY when the user types the first character
+    if (!startTime && cleanedUserText.length > 0) {
+        startTime = new Date().getTime();
+        if (!isRunning) {
+            isRunning = true;
+            startTimer();  // 🔥 Start the timer when the first character is typed
+        }
+    }
+
+    let inputIndex = 0;
+    for (let i = 0; i < selectedParagraph.length; i++) {
+        if (selectedParagraph[i] === " ") {
+            formattedText += " ";
+        } else {
+            if (inputIndex < cleanedUserText.length) {
+                totalTyped++;
+                if (cleanedUserText[inputIndex] === cleanedParagraph[inputIndex]) {
+                    formattedText += `<span class="correct">${selectedParagraph[i]}</span>`;
+                    correctTyped++;
+                } else {
+                    formattedText += `<span class="incorrect">${selectedParagraph[i]}</span>`;
+                }
+                inputIndex++;
+            } else {
+                formattedText += selectedParagraph[i];
+            }
+        }
+    }
+
+    backgroundText.innerHTML = formattedText;
+    inputBox.setSelectionRange(userText.length, userText.length);
+
+    // ✅ If user finishes typing before time runs out, stop the timer and show results
+    if (cleanedUserText === cleanedParagraph) {
+        clearInterval(timer);
+        const currentTime = new Date().getTime();
+        const timeTaken = startTime ? Math.floor((currentTime - startTime) / 1000) : 0;
+        endTest(true, timeTaken);
+    }
+}
+// Preload the beep sound
+const beep = new Audio("beep3.mp3");
+beep.load();
+
+
+timerSelect.addEventListener("change", function () {
+    let newTime = parseInt(timerSelect.value);
+
+    if (!isRunning) {
+        // If the test has not started, update countdown
+        countdown = newTime;
+        timerDisplay.innerText = `Time: ${countdown}s`;
+    } else {
+        // ⚠️ Do NOT restart the timer if the test is running!
+        let timeElapsed = parseInt(timerSelect.getAttribute("data-start-time")) || 0;
+        let remainingTime = newTime - timeElapsed;
+        
+        if (remainingTime > 0) {
+            countdown = remainingTime;
+            timerDisplay.innerText = `Time: ${countdown}s`;
+        }
+    }
+});
+
+
+function startTimer() {
+    if (timer) clearInterval(timer); // 🚀 Prevent multiple timers
+    timer = setInterval(() => {
+        countdown--;
+        timerDisplay.innerText = `Time: ${countdown}s`;
+
+        if (countdown === 4) {
+            beep.currentTime = 0;
+            beep.play().catch(error => console.error("Audio play failed:", error));
+        }
+
+        if (countdown <= 0) {
+            clearInterval(timer);
+            endTest();
+        }
+    }, 1000);
+}
+
+function startTest() {
+    selectedParagraph = getRandomParagraph();
+    backgroundText.innerHTML = selectedParagraph;
+
+    countdown = parseInt(timerSelect.value);
+    timerDisplay.innerText = `Time: ${countdown}s`;
+    inputBox.value = "";
+    totalTyped = 0;
+    correctTyped = 0;
+    startTime = null;
+    inputBox.disabled = false;
+    inputBox.focus();
+    updateBackgroundText();
+
+    startButton.disabled = true;
+    isRunning = false; // Make sure typing starts the timer, not button press
+}
+function calculateAccuracy() {
+    let userText = inputBox.value;
+    let totalTyped = userText.length;
+    let correctTyped = 0;
+
+    for (let i = 0; i < totalTyped; i++) {
+        if (userText[i] === selectedParagraph[i]) {
+            correctTyped++;
+        }
+    }
+
+    let accuracy = totalTyped > 0 ? (correctTyped / totalTyped) * 100 : 0;
+    return accuracy.toFixed(2); // Limit to 2 decimal places
+}
+
+
+function endTest(completed = false, timeTaken = null) {
+    inputBox.disabled = true;
+    clearInterval(timer);
+
+    const currentTime = new Date().getTime();
+    const elapsedTime = startTime ? (currentTime - startTime) / 60000 : 0; // Convert ms to minutes
+    const wordCount = inputBox.value.trim().split(/\s+/).length;
+    const wpm = elapsedTime > 0 ? Math.round(wordCount / elapsedTime) : 0;
+    const accuracy = totalTyped > 0 ? Math.round((correctTyped / totalTyped) * 100) : 100;
+
+    // **Fix:** Use the correct time taken when user finishes early
+    const displayTimeTaken = completed ? `${timeTaken}s` : `${timerSelect.value}s`;
+
+    // Play beep sound when test ends
+    beep.currentTime = 0;
+    beep.play().catch(error => console.error("Beep failed to play:", error));
+
+    const popup = document.createElement("div");
+    popup.id = "popup-message";
+    popup.innerHTML = `
+        <div class="popup-content">
+            <h2>${completed ? "Congratulations! You finished typing!" : "Time's up!"}</h2>
+            <p><strong>WPM:</strong> ${wpm}</p>
+            <p><strong>Accuracy:</strong> ${accuracy}%</p>
+            <p><strong>Time Taken:</strong> ${displayTimeTaken}</p>
+            <button id="close-popup">OK</button>
+        </div>
+    `;
+
+    document.body.appendChild(popup);
+
+    document.getElementById("close-popup").addEventListener("click", () => {
+        popup.remove();
+        startButton.disabled = false;
+    });
+
+    startButton.disabled = false;
+}
+
+
+inputBox.addEventListener("input", updateBackgroundText);
+startButton.addEventListener("click", startTest);
+
+window.onload = () => {
+    selectedParagraph = getRandomParagraph();
+    backgroundText.innerHTML = selectedParagraph;
+    inputBox.focus();
+};
+ 
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vatakshara Keyboard Layout</title>
+    <style>
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #282c34;
+}
+
+/* Main Container to Cover Full Screen */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Keyboard Layout Adjustments */
+.keyboard {
+    display: grid;
+    grid-template-columns: repeat(10, 80px); /* Increased width */
+    gap: 12px;
+    padding: 30px;
+    background: #1c1f26;
+    border-radius: 12px;
+}
+
+/* Keys Adjustments */
+.key {
+    width: 80px; /* Increased key width */
+    height: 50px; /* Reduced height */
+    background-color: #3b3f4a;
+    color: white;
+    font-size: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* Input inside Keys */
+.key input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+}
+.key:hover {
+    background-color: #5a5e6e;
+}
+
+.key:active {
+    background-color: #777b8c;
+    transform: scale(0.95);
+}
+
+.key.pressed {
+    background-color: green;
+}
+
+.key.wrong {
+    background-color: red;
+}
+.label {
+    font-size: 12px;
+    color: white; /* Changed to white */
+    margin-top: 5px;
+}
+
+#continueButton {
+    position: fixed;
+    bottom: 20px; /* Adjust distance from bottom */
+    left: 50%; /* Aligns the button to the center horizontally */
+    transform: translateX(-50%); /* Centers the button exactly */
+    align-items: center;
+    background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+    border: 0;
+    border-radius: 6px; /* Reduced border-radius */
+    box-shadow: rgba(151, 65, 252, 0.1) 0 4px 8px -3px; /* Softer shadow */
+    box-sizing: border-box;
+    color: #ffffff;
+    display: flex;
+    font-size: 16px; /* Slightly smaller font size */
+    justify-content: center;
+    line-height: 1em; /* Adjusted line height */
+    max-width: 100%;
+    min-width: 130px; /* Reduced width */
+    min-height: 38px; /* Added min height */
+    padding: 4px; /* Slightly reduced padding */
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#continueButton span {
+    background: none;
+    padding: 12px 20px; /* Reduced padding */
+    border-radius: 4px; /* Slightly smaller border-radius */
+    width: 100%;
+    height: 100%;
+    transition: 300ms;
+}
+
+#continueButton:hover span {
+    background: none;
+}
+#continueButton {
+    display: inline-block;
+    z-index: 10;
+    position: relative;
+    pointer-events: auto; /* Ensure the button is clickable */
+}
+#continueButton {
+    display:none;/*hides at first*/
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    z-index: 1000;
+    width: 300px;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+}
+
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popup p {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.popup button {
+    background: #00ddeb;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.popup button:hover {
+    background: #5b42f3;
+}
+.popup {
+            display: none; /* Hide initially */
+            /* Your existing popup styles */
+        }
+
+/* Heading Styling */
+.heading {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px 0;
+}
+
+/* Footer Styling */
+#footer-container {
+    width: 100%;
+}
+
+footer {
+    background-color: rgba(128, 128, 128, 0.5);
+    color: black;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    opacity: 0;
+    backdrop-filter: blur(8px);
+    font-size: 16px;
+    transition: opacity 0.5s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100vw;
+        height: auto;
+        padding: 10px;
+    }
+
+    .keyboard {
+        grid-template-columns: repeat(5, 50px); /* 5 columns instead of 10 */
+        gap: 8px;
+        padding: 15px;
+    }
+
+    .key {
+        width: 50px;
+        height: 40px;
+        font-size: 16px;
+        border-radius: 6px;
+    }
+
+    .key input {
+        font-size: 16px;
+    }
+
+    .heading {
+        font-size: 22px;
+        letter-spacing: 1px;
+    }
+
+    #continueButton {
+        font-size: 14px;
+        min-width: 100px;
+        min-height: 32px;
+        padding: 3px;
+    }
+
+    .popup {
+        width: 90%;
+        max-width: 280px;
+        padding: 15px;
+    }
+
+    .popup p {
+        font-size: 16px;
+    }
+
+    .popup button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+ </style>
+</head>
+<body>
+   
+    <body>
+         <!-- Help Button -->
+<button class="faq-button" onclick="showHelp()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+        <path d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"></path>
+    </svg>
+    <span class="tooltip">Need help</span>
+</button>
+
+<!-- Overlay -->
+<div id="overlay" onclick="hideHelp()"></div>
+
+<!-- Help Image Modal -->
+<div id="helpImage" onclick="event.stopPropagation()">
+    <button class="close-btn" onclick="hideHelp()">X</button>
+    <img src="http://ka-naada.in/wp-content/uploads/2025/04/sticker2.jpg" alt="logo" style="width: 100%;">
+</div>
+
+    <!-- Load Header Here -->
+    <div id="header-container"></div>
+        <!-- Heading for Gunitakshara -->
+        <h1 style="color: white; text-align: center; font-size: 36px; position: absolute; top: 30px; width: 100%;">ಒತ್ತಕ್ಷರಗಳು</h1>
+
+        <div id="vatakshara" class="keyboard"></div>
+        <div id="popup-container"></div>
+
+    
+        <div class="button-container">
+            <button id="continueButton" class="hidden">
+                <span class="text">Continue</span>
+            </button>
+        </div>
+     
+        <div id="popup" class="popup hidden">
+            <div class="popup-content">
+                <p>🎉 Stage 2 Completed! 🎉</p>
+                <button id="popupCloseButton">OK</button>
+            </div>
+        </div>
+        <div id="footer-container"></div>    
+    
+
+    
+    <script>
+        document.addEventListener("copy", (event) => {
+    event.preventDefault();
+    alert("Copying content is disabled.");
+});
+
+document.addEventListener("paste", (event) => {
+    event.preventDefault();
+    alert("Pasting content is disabled.");
+});
+
+          // Function to Load External HTML Files
+          function loadComponent(elementId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
+                })
+                .catch(error => console.error('Error loading component:', error));
+        }
+
+        // Load header.html and footer.html
+        loadComponent("header-container", "header.html");
+        loadComponent("footer-container", "footer.html");
+
+        // Footer Scroll Effect
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener("scroll", function () {
+            let footer = document.querySelector("footer");
+            let currentScrollY = window.scrollY;
+
+            if (currentScrollY > lastScrollY) {  
+                // Show footer when scrolling down
+                footer.style.opacity = "1";
+            } else {  
+                // Hide footer when scrolling up
+                footer.style.opacity = "0";
+            }
+
+            lastScrollY = currentScrollY;
+        });
+
+        // Show footer after 2 seconds on page load
+        setTimeout(() => {
+            let footer = document.querySelector("footer");
+            if (footer) {
+                footer.style.opacity = "1";
+            }
+        }, 1000);
+
+        function showHelp() {
+            document.getElementById("helpImage").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function hideHelp() {
+            document.getElementById("helpImage").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+
+       // Array of characters to be used for input (your 'vatakshara' array)
+       const vatakshara = ['ಕ್ಕ', 'ಖ್ಖ', 'ಗ್ಗ', 'ಘ್ಘ', 'ಙ್ಙ', 'ಚ್ಚ', 'ಛ್ಛ', 'ಜ್ಜ', 'ಝ್ಝ', 
+                            'ಟ್ಟ', 'ಡ್ಡ', 'ಢ್ಢ', 'ಣ್ಣ', 'ತ್ತ', 'ಥ್ಥ', 'ದ್ದ', 'ಧ್ಧ', 'ನ್ನ',
+                            'ಪ್ಪ', 'ಫ್ಫ', 'ಬ್ಬ', 'ಭ್ಭ', 'ಮ್ಮ', 'ಯ್ಯ', 'ರ್ರ', 'ಳ್ಳ', 'ವ್ವ', 'ಶ್ಶ',
+                            'ಷ್ಷ', 'ಸ್ಸ', 'ಹ್ಹ', 'ಳ್ಳ'];
+
+        // Shuffle the characters
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+        }
+
+        // Shuffle the vatakshara characters
+        shuffleArray(vatakshara);
+
+        // Function to check if all inputs are correct (all keys green)
+        function checkCompletion() {
+            const allGreen = [...document.querySelectorAll(".key")].every(key => key.classList.contains("pressed"));
+            document.getElementById("continueButton").style.display = allGreen ? "block" : "none";
+            document.getElementById("popup").style.display = allGreen ? "block" : "none";
+        }
+
+        function addInputListeners() {
+            const inputs = document.querySelectorAll(".key input");
+
+            inputs.forEach((input, index) => {
+                input.addEventListener("input", (event) => {
+                    const value = event.target.value.trim().normalize("NFC");
+                    const expectedValue = event.target.getAttribute("data-value").normalize("NFC");
+
+                    if (value.length > expectedValue.length) {
+                        event.target.value = value.slice(0, expectedValue.length); // Prevent extra characters
+                    }
+
+                    if (value === expectedValue) {
+                        event.target.parentElement.classList.add("pressed");
+                        event.target.parentElement.classList.remove("wrong");
+
+                        // Move to next input if correct
+                        if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                    } else if (value.length > 0) {
+                        event.target.parentElement.classList.add("wrong");
+                        event.target.parentElement.classList.remove("pressed");
+                    }
+
+                    // Check if all inputs are correct after every change
+                    checkCompletion();
+                });
+
+                input.addEventListener("keydown", (event) => {
+                    if (event.key === "Backspace") {
+                        input.value = ""; // Clear input
+                        event.target.parentElement.classList.remove("wrong", "pressed"); // Reset color
+                        
+                        // Hide button if a correction is needed
+                        checkCompletion();
+                    }
+                });
+            });
+        }
+
+        // Function to generate the keyboard layout
+        function generateVataksharaKeyboard(keys) {
+            const stageDiv = document.getElementById("vatakshara");
+            stageDiv.innerHTML = "";
+            
+            const limitedKeys = keys.slice(0, 34);
+
+            limitedKeys.forEach(letter => {
+                const keyContainer = document.createElement("div");
+                keyContainer.classList.add("key-container");
+
+                const keyDiv = document.createElement("div");
+                keyDiv.classList.add("key");
+
+                const input = document.createElement("input");
+                input.setAttribute("type", "text");
+                input.setAttribute("maxlength", "4");
+                input.setAttribute("data-value", letter);
+                input.setAttribute("placeholder", letter);
+
+                keyDiv.appendChild(input);
+                keyContainer.appendChild(keyDiv);
+                
+                const label = document.createElement("span");
+                label.classList.add("label");
+                const baseLetter = letter[0];
+                const secondLetter = letter[2];
+                label.textContent = `ಒತ್ತಿ ${baseLetter}+್+${secondLetter}`;
+                keyContainer.appendChild(label);
+
+                stageDiv.appendChild(keyContainer);
+            });
+
+            addInputListeners();
+        }
+
+        generateVataksharaKeyboard(vatakshara);
+
+        // Functionality for closing the popup
+        document.getElementById("popupCloseButton").addEventListener("click", () => {
+            document.getElementById("popup").style.display = "none";
+        });
+   // Add click event listener to the continue button
+   document.getElementById("continueButton").addEventListener("click", () => {
+        console.log("Redirecting to Kanada stage 4.html..."); // Debugging log
+        window.location.href = "Kanada stage 3.html";
+    });
+
+generateVataksharaKeyboard(vatakshara);
+document.getElementById("continueButton").classList.remove("hidden");
+
+    </script>
+
+</body>
+</html>

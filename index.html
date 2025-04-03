@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KaNaada Phonetics</title>
+    <style>
+             * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(
+                    30deg,
+                    #111111 12%,
+                    transparent 12.5%,
+                    transparent 87%,
+                    #111111 87.5%,
+                    #111111
+                ),
+                linear-gradient(
+                    150deg,
+                    #111111 12%,
+                    transparent 12.5%,
+                    transparent 87%,
+                    #111111 87.5%,
+                    #111111
+                );
+            background-color: #000000;
+            background-size: 80px 140px;
+            box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.1);
+            position: relative;
+            padding: 0 5%;
+        }
+
+        .card {
+            width: 45%;
+            height: 85%;
+            background: linear-gradient(to bottom right, #b5179e, #7209b7);
+            color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 5px 5px 20px rgba(114, 9, 183, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .card-content {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .external-link {
+            display: inline-block;
+            background: #fff;
+            color: #7209b7;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .external-link:hover {
+            background: #7209b7;
+            color: #fff;
+        }
+
+        .button-container {
+            position: absolute;
+            top: 25%;
+            left: calc(52% + 5cm);
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #d63384, #9b29b7);
+            margin-bottom: 75px;
+            box-shadow: 0px 5px 20px rgba(214, 51, 132, 0.5);
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                box-shadow: 0px 5px 15px rgba(214, 51, 132, 0.5);
+            }
+            to {
+                transform: scale(1.05);
+                box-shadow: 0px 8px 25px rgba(214, 51, 132, 0.7);
+            }
+        }
+
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-button {
+            background: linear-gradient(90deg, #d63384, #9b29b7);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-button:hover {
+            background: linear-gradient(90deg, #9b29b7, #d63384);
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            background: #fff;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .dropdown a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown-container:hover .dropdown {
+            display: block;
+        }
+        .dropdowns-container {
+            display: flex;
+            gap: 10px; /* Adjust the spacing between dropdowns as needed */
+        }
+        .lets-go-button {
+    position: fixed;
+    bottom: 5px; /* Adjust this value to move the button vertically */
+    right: 20px;
+    padding: 20px 40px; /* Increased padding for a larger button */
+    background-color: #ff5722;
+    color: #fff;
+    font-size: 1.5rem; /* Increased font size */
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s;
+    z-index: 1000; /* Ensure the button appears above other elements */
+}
+
+.lets-go-button:hover {
+    background-color: #e64a19;
+    transform: translateY(-2px);
+}
+
+.lets-go-button:active {
+    background-color: #d84315;
+    transform: translateY(0);
+}
+
+
+
+        .lets-go-button:hover {
+            background-color: #e64a19;
+            transform: translateY(-2px);
+        }
+
+        .lets-go-button:active {
+            background-color: #d84315;
+            transform: translateY(0);
+        }
+     
+        /* Container for the button */
+.Btn-Container {
+  display: flex;
+  width: 170px;
+  height: fit-content;
+  background-color: #1d2129;
+  border-radius: 40px;
+  box-shadow: 0px 5px 10px #bebebe;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  position: fixed;
+  bottom: -200px; /* Adjust this value to move the button up or down */
+  right: 20px;
+}
+
+/* Icon container */
+.icon-Container {
+  width: 45px;
+  height: 45px;
+  background-color: #ff00ff; /* Purplish-pink color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 3px solid #1d2129;
+}
+
+
+/* Text styling */
+.text {
+  width: calc(170px - 45px);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.1em;
+  letter-spacing: 1.2px;
+}
+
+/* Icon animation */
+.icon-Container svg {
+  transition-duration: 1.5s;
+}
+
+.Btn-Container:hover .icon-Container svg {
+  transition-duration: 1.5s;
+  animation: arrow 1s linear infinite;
+}
+
+@keyframes arrow {
+  0% {
+    opacity: 0;
+    margin-left: 0px;
+  }
+  100% {
+    opacity: 1;
+    margin-left: 10px;
+  }
+}
+.cloud {
+    display: none;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+.heading {
+    font-size: 40px; /* Increased from 28px */
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px 0;
+}
+
+
+/* Footer Styling */
+#footer-container {
+    width: 100%;
+}
+
+footer {
+    background-color: rgba(128, 128, 128, 0.5);
+    color: black;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    opacity: 0;
+    backdrop-filter: blur(8px);
+    font-size: 16px;
+    transition: opacity 0.5s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack the items vertically */
+        justify-content: center;
+        align-items: center;
+        padding: 0 5%;
+    }
+
+    .card {
+        width: 80%; /* Adjust width for smaller screens */
+        height: auto;
+        margin-bottom: 20px; /* Add some spacing between cards */
+    }
+
+    .card-title {
+        font-size: 1.5rem; /* Smaller font size for mobile */
+    }
+
+    .card-content {
+        font-size: 1rem; /* Smaller font size for mobile */
+    }
+
+    .external-link {
+        padding: 10px 15px; /* Adjust padding for smaller screens */
+        font-size: 1rem; /* Adjust font size for mobile */
+    }
+
+    .button-container {
+        position: relative; /* Adjust position for smaller screens */
+        left: 0;
+        transform: none;
+        margin-top: 20px; /* Add space between elements */
+    }
+
+    .label {
+        font-size: 1rem; /* Smaller label font for mobile */
+        padding: 10px 15px; /* Adjust padding */
+    }
+
+    .dropdown-container {
+        margin-bottom: 20px; /* Adjust spacing between dropdowns */
+    }
+
+    .dropdown-button {
+        padding: 10px 15px; /* Smaller padding */
+        font-size: 0.9rem; /* Adjust font size */
+    }
+
+    .dropdown {
+        min-width: 100%; /* Ensure the dropdown menu spans the full width */
+    }
+
+    .lets-go-button {
+        bottom: 20px; /* Adjust positioning */
+        right: 20px;
+        padding: 15px 30px; /* Smaller button for mobile */
+        font-size: 1.2rem; /* Adjust font size */
+    }
+
+    .Btn-Container {
+        width: 100%; /* Make button container full width on smaller screens */
+        height: fit-content;
+        position: relative;
+        bottom: 50px; /* Adjust vertical placement */
+    }
+
+    .icon-Container {
+        width: 40px; /* Adjust icon size */
+        height: 40px;
+    }
+
+    .text {
+        font-size: 1rem; /* Adjust text size */
+    }
+
+    footer {
+        padding: 10px; /* Adjust footer padding */
+        font-size: 14px; /* Smaller font size for mobile */
+    }
+
+    .cloud {
+        font-size: 12px; /* Smaller cloud text */
+        top: 30px; /* Adjust position */
+    }
+
+    .heading {
+        font-size: 30px; /* Reduce heading size on smaller screens */
+    }
+}
+   
+    </style>
+</head>
+<body>
+     <!-- Load Header Here -->
+     <div id="header-container"></div>
+
+
+ 
+    <div class="container">
+        <div class="card">
+            <div class="card-title">Welcome to Ka-Naada Phonetics</div>
+            <div class="card-content">
+                One keyboard for many Indic languages. <br><br>
+                Ka-Naada is a unique patented keyboard layout design for Indic languages (Brahmi based), without clutter and overload of English language feature of ‘spelling’.
+            </div>
+            <a href="https://ka-naada.com/" class="external-link" target="_blank">Learn More</a>
+        </div>
+        <div class="button-container">
+            <div class="label">Typing Guru - Unlock the Power of Bilingual Typing!<br>To move ahead, select the language and level below to get started.</div>
+            <div class="dropdowns-container">
+                <!-- Language Dropdown -->
+                <div class="dropdown-container">
+                    <button class="dropdown-button" id="languageButton">Select Language</button>
+                    <div class="dropdown" id="languageDropdown">
+                        <a href="#" data-value="English">English</a>
+                        <a href="#" data-value="Kannada">Kannada</a>
+                        <a href="#" data-value="Tamil">Tamil</a>
+                    </div>
+                </div>
+                <!-- Level Dropdown -->
+                <div class="dropdown-container">
+                    <button class="dropdown-button" id="levelButton">Select Level</button>
+                    <div class="dropdown" id="levelDropdown">
+                        <a href="#" data-value="Learning">Learning</a>
+                        <a href="#" data-value="Practicing">Practicing</a>
+                    </div>
+                </div>
+            </div>
+            
+
+            <button id="letsGoButton" class="Btn-Container" disabled>
+                <span class="text">Let's go!</span>
+                <span class="icon-Container">
+                    <svg viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="1.61321" cy="1.61321" r="1.5" fill="black"></circle>
+                        <circle cx="5.73583" cy="1.61321" r="1.5" fill="black"></circle>
+                        <circle cx="5.73583" cy="5.5566" r="1.5" fill="black"></circle>
+                        <circle cx="9.85851" cy="5.5566" r="1.5" fill="black"></circle>
+                        <circle cx="9.85851" cy="9.5" r="1.5" fill="black"></circle>
+                        <circle cx="13.9811" cy="9.5" r="1.5" fill="black"></circle>
+                        <circle cx="5.73583" cy="13.4434" r="1.5" fill="black"></circle>
+                        <circle cx="9.85851" cy="13.4434" r="1.5" fill="black"></circle>
+                        <circle cx="1.61321" cy="17.3868" r="1.5" fill="black"></circle>
+                        <circle cx="5.73583" cy="17.3868" r="1.5" fill="black"></circle>
+                    </svg>
+                </span>
+            </button>
+        </div>
+    </div>
+    <div id="recommendationCloud" class="cloud">💡 Tip: Learning mode helps you start from the basics!</div>
+<!-- Footer Container -->
+<div id="footer-container"></div>
+    <script>
+         // Function to Load External HTML Files
+         function loadComponent(elementId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
+                })
+                .catch(error => console.error('Error loading component:', error));
+        }
+
+        // Load header.html and footer.html
+        loadComponent("header-container", "header.html");
+        loadComponent("footer-container", "footer.html");
+
+        // Footer Scroll Effect
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener("scroll", function () {
+            let footer = document.querySelector("footer");
+            let currentScrollY = window.scrollY;
+
+            if (currentScrollY > lastScrollY) {  
+                // Show footer when scrolling down
+                footer.style.opacity = "1";
+            } else {  
+                // Hide footer when scrolling up
+                footer.style.opacity = "0";
+            }
+
+            lastScrollY = currentScrollY;
+        });
+
+        // Show footer after 2 seconds on page load
+        setTimeout(() => {
+            let footer = document.querySelector("footer");
+            if (footer) {
+                footer.style.opacity = "1";
+            }
+        }, 1000);
+        function showHelp() {
+            document.getElementById("helpImage").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function hideHelp() {
+            document.getElementById("helpImage").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+
+   document.addEventListener("DOMContentLoaded", function () {
+    const languageButton = document.getElementById("languageButton");
+    const languageDropdown = document.getElementById("languageDropdown");
+    const languageOptions = languageDropdown.querySelectorAll("a");
+    const levelButton = document.getElementById("levelButton");
+    const levelDropdown = document.getElementById("levelDropdown");
+    const learningMessage = document.getElementById("learningMessage");
+    const recommendationCloud = document.getElementById("recommendationCloud");
+    const letsGoButton = document.getElementById("letsGoButton");
+    let hideTimeout;
+
+    function updateButtonText(buttonId, text) {
+        if (!text) return;
+        const button = document.getElementById(buttonId);
+        if (button) {
+            button.innerText = text;
+            checkSelections();
+        }
+    }
+
+    function checkSelections() {
+        const language = languageButton.innerText.trim();
+        const level = levelButton.innerText.trim();
+        letsGoButton.disabled = !(language !== "Select Language" && level !== "Select Level");
+    }
+
+    languageButton.addEventListener("click", function () {
+        languageDropdown.style.display = 
+            languageDropdown.style.display === "block" ? "none" : "block";
+    });
+
+    languageOptions.forEach(option => {
+        option.addEventListener("click", function (event) {
+            event.preventDefault();
+            const selectedLanguage = this.getAttribute("data-value");
+            updateButtonText("languageButton", selectedLanguage);
+            languageDropdown.style.display = "none";
+        });
+    });
+
+    levelDropdown.querySelectorAll("a").forEach(item => {
+        item.addEventListener("click", function (event) {
+            event.preventDefault();
+            const selectedValue = this.getAttribute("data-value");
+            updateButtonText("levelButton", selectedValue);
+
+            if (learningMessage) {
+                learningMessage.textContent = selectedValue === "Learning" 
+                    ? "You have selected the Learning mode!" 
+                    : "";
+                learningMessage.style.display = selectedValue === "Learning" ? "inline" : "none";
+            }
+
+            if (selectedValue === "Practicing") {
+                const rect = levelButton.getBoundingClientRect();
+                recommendationCloud.style.top = `${rect.bottom + 5}px`;
+                recommendationCloud.style.left = `${rect.left + (rect.width / 2)}px`;
+                recommendationCloud.style.transform = "translateX(-50%)";
+                recommendationCloud.style.display = "block";
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(() => {
+                    recommendationCloud.style.display = "none";
+                }, 2000);
+            } else {
+                recommendationCloud.style.display = "none";
+            }
+
+            levelDropdown.style.display = "none";
+        });
+    });
+
+    levelButton.addEventListener("click", function () {
+        const isDropdownOpen = levelDropdown.style.display === "block";
+        levelDropdown.style.display = isDropdownOpen ? "none" : "block";
+        if (isDropdownOpen) {
+            recommendationCloud.style.display = "none";
+        }
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest(".dropdown-container")) {
+            document.querySelectorAll(".dropdown").forEach(dropdown => {
+                dropdown.style.display = "none";
+            });
+            recommendationCloud.style.display = "none";
+        }
+    });
+
+    letsGoButton.addEventListener("click", function () {
+        let language = languageButton.innerText.trim();
+        let level = levelButton.innerText.trim();
+
+        const pages = {
+    "English_Learning": "English.html",
+    "English_Practicing": "Practice stage english.html",
+    "Kannada_Learning": "Kanada stage 1.html",
+    "Kannada_Practicing": "Practice stage kanada.html",
+    "Tamil_Learning": "Tamil stage 1.html",
+    "Tamil_Practicing": "Practice stage tamil.html",
+};
+
+
+        let key = `${language}_${level}`;
+        if (pages[key]) {
+            window.location.href = pages[key];
+        } else {
+            alert("Please select both a language and a level.");
+        }
+    });
+
+    checkSelections();
+});
+
+
+    </script>
+</body>
+</html>
